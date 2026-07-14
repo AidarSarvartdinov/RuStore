@@ -1,12 +1,13 @@
 package com.aidarsarvartdinov.rustore.data.repository
 
+import com.aidarsarvartdinov.rustore.data.models.ApiResult
 import com.aidarsarvartdinov.rustore.data.models.AppDetails
 import com.aidarsarvartdinov.rustore.data.models.AppSummary
 import com.aidarsarvartdinov.rustore.data.models.Category
 
 interface AppRepository {
-    suspend fun getApps(): List<AppSummary>
-    suspend fun getAppsByCategory(categoryName: String): List<AppSummary>
-    suspend fun getAppDetails(appId: String): AppDetails
-    suspend fun getCategories(): List<Category>
+    suspend fun getApps(): ApiResult<List<AppSummary>>
+    suspend fun getAppsByCategory(categoryName: String): ApiResult<List<AppSummary>>
+    suspend fun getAppDetails(appId: String): ApiResult<AppDetails>
+    suspend fun getCategories(): ApiResult<List<Category>>
 }

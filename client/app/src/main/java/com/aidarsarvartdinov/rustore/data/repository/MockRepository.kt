@@ -1,38 +1,44 @@
 package com.aidarsarvartdinov.rustore.data.repository
 
+import com.aidarsarvartdinov.rustore.data.models.ApiResult
 import com.aidarsarvartdinov.rustore.data.models.AppDetails
 import com.aidarsarvartdinov.rustore.data.models.AppSummary
 import com.aidarsarvartdinov.rustore.data.models.Category
 
 class MockRepository: AppRepository {
-    override suspend fun getApps(): List<AppSummary> {
-        return apps.map { appDetails ->
+    override suspend fun getApps(): ApiResult<List<AppSummary>> {
+        return ApiResult.Success(apps.map { appDetails ->
             AppSummary(
                 appDetails.id,
                 appDetails.name,
                 appDetails.description.substring(20),
                 appDetails.category,
-                appDetails.iconUrl) }
+                appDetails.iconUrl) })
     }
 
-    override suspend fun getAppsByCategory(categoryName: String): List<AppSummary> {
-        return apps
+    override suspend fun getAppsByCategory(categoryName: String): ApiResult<List<AppSummary>> {
+        return ApiResult.Success(apps
             .filter { appDetails -> appDetails.category == categoryName }
-            .map { appDetails ->
+            .map { appDetails ->1
                     AppSummary(
                         appDetails.id,
                         appDetails.name,
                         appDetails.description.substring(20),
                         appDetails.category,
-                        appDetails.iconUrl) }
+                        appDetails.iconUrl) })
     }
 
-    override suspend fun getAppDetails(appId: String): AppDetails {
-        return apps.find { appDetails -> appDetails.id == appId }!!
+    override suspend fun getAppDetails(appId: String): ApiResult<AppDetails> {
+        val app: AppDetails? = apps.find { appDetails -> appDetails.id == appId }
+        if (app == null) {
+            return ApiResult.Error("App not found")
+        }
+
+        return ApiResult.Success(app)
     }
 
-    override suspend fun getCategories(): List<Category> {
-        return listOf(
+    override suspend fun getCategories(): ApiResult<List<Category>> {
+        return ApiResult.Success(listOf(
             Category(
                 "Финансы", 2
             ),
@@ -48,7 +54,7 @@ class MockRepository: AppRepository {
             Category(
                 "Транспорт", 1
             ),
-        )
+        ))
     }
 
     private companion object MockData {
