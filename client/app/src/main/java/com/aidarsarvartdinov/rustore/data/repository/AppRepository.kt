@@ -8,5 +8,5 @@ interface AppRepository {
     suspend fun getApps(): List<AppSummary>
     suspend fun getAppsByCategory(categoryName: String): List<AppSummary>
     suspend fun getAppDetails(appId: String): AppDetails
-    suspend fun getCategories(): Category
+    suspend fun getCategories(): List<Category>
 }
