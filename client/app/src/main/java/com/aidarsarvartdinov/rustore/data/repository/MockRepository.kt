@@ -11,7 +11,7 @@ class MockRepository: AppRepository {
             AppSummary(
                 appDetails.id,
                 appDetails.name,
-                appDetails.description.substring(20),
+                appDetails.description.substring(0, 40),
                 appDetails.category,
                 appDetails.iconUrl) })
     }
@@ -23,7 +23,7 @@ class MockRepository: AppRepository {
                     AppSummary(
                         appDetails.id,
                         appDetails.name,
-                        appDetails.description.substring(20),
+                        appDetails.description.substring(0, 40),
                         appDetails.category,
                         appDetails.iconUrl) })
     }
