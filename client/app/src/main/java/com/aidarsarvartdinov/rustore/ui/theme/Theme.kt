@@ -9,6 +9,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
@@ -18,19 +19,32 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = Color(0xFF1976D2),
+    onPrimary = Color(0xFFFFFFFF),
+//    primaryContainer = Color(0xFFBBDEFB),
+    primaryContainer = Color.White,
+    onPrimaryContainer = Color(0xFF0D47A1),
 
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    secondary = Color(0xFF0D47A1),
+    onSecondary = Color(0xFFFFFFFF),
+    secondaryContainer = Color(0xFFE3F2FD),
+    onSecondaryContainer = Color(0xFF0D47A1),
+
+//    background = Color(0xFFFFFFFF),
+    background = Color(0xFFF5F5F5),
+    onBackground = Color.Black,
+
+//    surface = Color(0xFFF5F5F5),
+    surface = Color.White,
+    onSurface = Color.Black,
+
+    surfaceVariant = Color(0xFFEEEEEE),
+    onSurfaceVariant = Color(0xFF616161),
+
+    error = Color(0xFFD32F2F),
+    onError = Color(0xFFFFFFFF),
+    errorContainer = Color(0xFFFFCDD2),
+    onErrorContainer = Color(0xFFB71C1C),
 )
 
 @Composable
