@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.aidarsarvartdinov.rustore.ui.navigation.AppNavigation
 import com.aidarsarvartdinov.rustore.ui.showcase.ShowcaseScreen
 import com.aidarsarvartdinov.rustore.ui.theme.RuStoreTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,7 +25,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             RuStoreTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    ShowcaseScreen()
+                    AppNavigation()
                 }
             }
         }

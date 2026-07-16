@@ -8,5 +8,6 @@ data class AppDetails(
     val developer: String,
     val ageRating: String,
     val iconUrl: String,
-    val screenshots: List<String>
+    val screenshots: List<String>,
+    val downloads: Int = 0
 )

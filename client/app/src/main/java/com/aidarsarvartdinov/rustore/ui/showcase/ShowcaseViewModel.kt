@@ -17,7 +17,8 @@ class ShowcaseViewModel @Inject constructor(
     private val repository: AppRepository,
     private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
-    private val category: String? = savedStateHandle["category"]
+
+    val category: String? = savedStateHandle["category"]
 
     private val _uiState = MutableStateFlow<ApiResult<List<AppSummary>>>(ApiResult.Loading)
     val uiState: StateFlow<ApiResult<List<AppSummary>>> = _uiState
