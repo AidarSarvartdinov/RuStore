@@ -19,11 +19,11 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Color(0xFF1976D2),
+    primary = Color(41, 141, 255),
     onPrimary = Color(0xFFFFFFFF),
 //    primaryContainer = Color(0xFFBBDEFB),
-    primaryContainer = Color.White,
-    onPrimaryContainer = Color(0xFF0D47A1),
+    primaryContainer = Color(242, 243, 245),
+//    onPrimaryContainer = Color(0xFF0D47A1),
 
     secondary = Color(0xFF0D47A1),
     onSecondary = Color(0xFFFFFFFF),
@@ -31,7 +31,7 @@ private val LightColorScheme = lightColorScheme(
     onSecondaryContainer = Color(0xFF0D47A1),
 
 //    background = Color(0xFFFFFFFF),
-    background = Color(0xFFF5F5F5),
+    background = Color(242, 243, 245),
     onBackground = Color.Black,
 
 //    surface = Color(0xFFF5F5F5),
@@ -54,15 +54,16 @@ fun RuStoreTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
+//    val colorScheme = when {
+//        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+//            val context = LocalContext.current
+//            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+//        }
+//
+//        darkTheme -> DarkColorScheme
+//        else -> LightColorScheme
+//    }
+    val colorScheme = LightColorScheme
 
     MaterialTheme(
         colorScheme = colorScheme,
