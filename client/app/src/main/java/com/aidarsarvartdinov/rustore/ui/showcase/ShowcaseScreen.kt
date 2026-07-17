@@ -134,9 +134,7 @@ fun ShowcaseScreen(
                 is ApiResult.Success -> {
                     val apps = (uiState as ApiResult.Success).data
                     LazyColumn(
-                        contentPadding = PaddingValues(vertical = 8.dp),
-                        modifier = Modifier
-//                            .padding(innerPadding)
+                        contentPadding = PaddingValues(vertical = 8.dp)
                     ) {
                         items(apps) { app ->
                             AppCard(app) {

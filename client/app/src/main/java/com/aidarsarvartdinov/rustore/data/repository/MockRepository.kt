@@ -71,7 +71,8 @@ class MockRepository: AppRepository {
                     "https://wplife.ru/placeholder/600x1200",
                     "https://wplife.ru/placeholder/600x1200",
                     "https://wplife.ru/placeholder/600x1200"
-                )
+                ),
+                downloads = 15
             ),
             AppDetails(
                 id = "2",
@@ -85,7 +86,8 @@ class MockRepository: AppRepository {
                     "https://wplife.ru/placeholder/600x1200",
                     "https://wplife.ru/placeholder/600x1200",
                     "https://wplife.ru/placeholder/600x1200"
-                )
+                ),
+                downloads = 34
             ),
             AppDetails(
                 id = "3",
@@ -99,7 +101,8 @@ class MockRepository: AppRepository {
                     "https://wplife.ru/placeholder/600x1200",
                     "https://wplife.ru/placeholder/600x1200",
                     "https://wplife.ru/placeholder/600x1200"
-                )
+                ),
+                downloads = 20
             ),
             AppDetails(
                 id = "4",
@@ -113,7 +116,8 @@ class MockRepository: AppRepository {
                     "https://wplife.ru/placeholder/600x1200",
                     "https://wplife.ru/placeholder/600x1200",
                     "https://wplife.ru/placeholder/600x1200"
-                )
+                ),
+                downloads = 25
             ),
             AppDetails(
                 id = "5",
@@ -127,7 +131,8 @@ class MockRepository: AppRepository {
                     "https://wplife.ru/placeholder/600x1200",
                     "https://wplife.ru/placeholder/600x1200",
                     "https://wplife.ru/placeholder/600x1200"
-                )
+                ),
+                downloads = 19
             ),
             AppDetails(
                 id = "6",
@@ -141,7 +146,8 @@ class MockRepository: AppRepository {
                     "https://wplife.ru/placeholder/600x1200",
                     "https://wplife.ru/placeholder/600x1200",
                     "https://wplife.ru/placeholder/600x1200"
-                )
+                ),
+                downloads = 22
             )
         )
     }

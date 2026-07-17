@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.aidarsarvartdinov.rustore.ui.appDetails.AppDetailsScreen
 import com.aidarsarvartdinov.rustore.ui.categories.CategoriesScreen
 import com.aidarsarvartdinov.rustore.ui.showcase.ShowcaseScreen
 
@@ -24,6 +25,18 @@ fun AppNavigation() {
         }
         composable("categories") {
             CategoriesScreen(navController)
+        }
+        composable(
+            route = "appDetails/{appId}",
+            arguments = listOf(
+                navArgument("appId") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val appId = backStackEntry.arguments?.getString("appId") ?: ""
+            AppDetailsScreen(
+                navController = navController,
+                appId = appId
+            )
         }
     }
 }
