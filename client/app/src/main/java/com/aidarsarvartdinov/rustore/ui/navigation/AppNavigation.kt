@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.aidarsarvartdinov.rustore.ui.appDetails.AppDetailsScreen
 import com.aidarsarvartdinov.rustore.ui.categories.CategoriesScreen
+import com.aidarsarvartdinov.rustore.ui.screenshots.ScreenshotsScreen
 import com.aidarsarvartdinov.rustore.ui.showcase.ShowcaseScreen
 
 @Composable
@@ -36,6 +37,21 @@ fun AppNavigation() {
             AppDetailsScreen(
                 navController = navController,
                 appId = appId
+            )
+        }
+        composable(
+            route = "screenshots/{appId}/{selectedIndex}",
+            arguments = listOf(
+                navArgument("appId") { type = NavType.StringType },
+                navArgument("selectedIndex") { type = NavType.IntType }
+            )
+        ) { backStackEntry ->
+            val appId = backStackEntry.arguments?.getString("appId") ?: ""
+            val selectedIndex = backStackEntry.arguments?.getInt("selectedIndex") ?: 0
+            ScreenshotsScreen(
+                navController = navController,
+                appId = appId,
+                selectedIndex = selectedIndex
             )
         }
     }

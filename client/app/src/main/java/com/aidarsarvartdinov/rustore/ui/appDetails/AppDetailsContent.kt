@@ -1,10 +1,10 @@
 package com.aidarsarvartdinov.rustore.ui.appDetails
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,7 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -143,20 +143,26 @@ fun AppDetailsContent(
                             color = MaterialTheme.colorScheme.onSurface
                         )
                     }
-                    Spacer(modifier = Modifier.height(16.dp))
-                    LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        items(app.screenshots) { screenshotUrl ->
-                            AsyncImage(
-                                model = screenshotUrl,
-                                contentDescription = "Скриншот",
-                                modifier = Modifier
-                                    .height(200.dp)
-                                    .width(120.dp)
-                                    .clip(RoundedCornerShape(8.dp)),
-                                contentScale = ContentScale.Crop
-                            )
+
+                    if (app.screenshots.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        LazyRow(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            itemsIndexed(app.screenshots) { index, screenshotUrl ->
+                                AsyncImage(
+                                    model = screenshotUrl,
+                                    contentDescription = "Скриншот",
+                                    modifier = Modifier
+                                        .height(200.dp)
+                                        .width(120.dp)
+                                        .clip(RoundedCornerShape(8.dp))
+                                        .clickable {
+                                            navController.navigate("screenshots/${app.id}/$index")
+                                        },
+                                    contentScale = ContentScale.Crop
+                                )
+                            }
                         }
                     }
 
