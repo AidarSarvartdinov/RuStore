@@ -35,12 +35,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aidarsarvartdinov.rustore.data.models.ApiResult
+import com.aidarsarvartdinov.rustore.ui.common.ErrorScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -145,10 +144,9 @@ fun ShowcaseScreen(
                 }
                 is ApiResult.Error -> {
                     val error = (uiState as ApiResult.Error).message
-                    Text(text = error)
-//            ErrorScreen(message = error) {
-//                viewModel.loadApps() //retry
-//            }
+                    ErrorScreen(message = error) {
+                        viewModel.loadApps()
+                    }
                 }
             }
         }

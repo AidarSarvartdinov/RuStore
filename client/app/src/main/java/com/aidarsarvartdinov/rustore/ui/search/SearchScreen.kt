@@ -37,6 +37,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aidarsarvartdinov.rustore.data.models.ApiResult
+import com.aidarsarvartdinov.rustore.ui.common.ErrorScreen
 import com.aidarsarvartdinov.rustore.ui.showcase.AppCard
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -122,10 +123,10 @@ fun SearchScreen(
                 is ApiResult.Error -> {
                     val error = (uiState as ApiResult.Error).message
                     Text(text = error)
-//                    ErrorScreen(
-//                        message = error,
-//                        onRetry = { viewModel.loadAllApps() }
-//                    )
+                    ErrorScreen(
+                        message = error,
+                        onRetry = { viewModel.loadAllApps() }
+                    )
                 }
             }
         }

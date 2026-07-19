@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aidarsarvartdinov.rustore.data.models.ApiResult
+import com.aidarsarvartdinov.rustore.ui.common.ErrorScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -90,11 +91,10 @@ fun ScreenshotsScreen(
                 is ApiResult.Error -> {
                     val error = (uiState as ApiResult.Error).message
                     Text(text = error)
-//                    ErrorScreen(
-//                        message = error,
-//                        onRetry = { viewModel.loadScreenshots(appId) },
-//                        textColor = Color.White
-//                    )
+                    ErrorScreen(
+                        message = error,
+                        onRetry = { viewModel.loadScreenshots(appId) }
+                    )
                 }
             }
         }

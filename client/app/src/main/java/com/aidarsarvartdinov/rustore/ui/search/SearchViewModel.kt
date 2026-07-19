@@ -28,7 +28,7 @@ class SearchViewModel @Inject constructor(
         loadAllApps()
     }
 
-    private fun loadAllApps() {
+    fun loadAllApps() {
         viewModelScope.launch {
             _uiState.value = ApiResult.Loading
             val result = repository.getApps()
