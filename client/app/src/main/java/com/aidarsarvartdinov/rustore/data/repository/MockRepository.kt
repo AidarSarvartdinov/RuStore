@@ -13,7 +13,8 @@ class MockRepository: AppRepository {
                 appDetails.name,
                 appDetails.description.substring(0, 40),
                 appDetails.category,
-                appDetails.iconUrl) })
+                appDetails.iconUrl,
+                appDetails.downloads) })
     }
 
     override suspend fun getAppsByCategory(categoryName: String): ApiResult<List<AppSummary>> {
@@ -25,7 +26,8 @@ class MockRepository: AppRepository {
                         appDetails.name,
                         appDetails.description.substring(0, 40),
                         appDetails.category,
-                        appDetails.iconUrl) })
+                        appDetails.iconUrl,
+                        appDetails.downloads) })
     }
 
     override suspend fun getAppDetails(appId: String): ApiResult<AppDetails> {

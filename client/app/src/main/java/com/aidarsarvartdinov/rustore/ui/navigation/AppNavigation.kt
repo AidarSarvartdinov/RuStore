@@ -9,6 +9,7 @@ import androidx.navigation.navArgument
 import com.aidarsarvartdinov.rustore.ui.appDetails.AppDetailsScreen
 import com.aidarsarvartdinov.rustore.ui.categories.CategoriesScreen
 import com.aidarsarvartdinov.rustore.ui.screenshots.ScreenshotsScreen
+import com.aidarsarvartdinov.rustore.ui.search.SearchScreen
 import com.aidarsarvartdinov.rustore.ui.showcase.ShowcaseScreen
 
 @Composable
@@ -53,6 +54,9 @@ fun AppNavigation() {
                 appId = appId,
                 selectedIndex = selectedIndex
             )
+        }
+        composable("search") {
+            SearchScreen(navController)
         }
     }
 }

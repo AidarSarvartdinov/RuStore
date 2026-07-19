@@ -99,7 +99,7 @@ fun ShowcaseScreen(
 
                     TextButton(
                         onClick = {
-                            TODO("Navigate to search")
+                            navController.navigate("search")
                         }
                     ) {
                         Icon(Icons.Default.Search, contentDescription = null)
