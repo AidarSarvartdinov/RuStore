@@ -114,7 +114,7 @@ fun SearchScreen(
                     LazyColumn {
                         items(apps) { app ->
                             AppCard(app = app) {
-                                navController.navigate("appDetail/${app.id}")
+                                navController.navigate("appDetails/${app.id}")
                             }
                         }
                     }
