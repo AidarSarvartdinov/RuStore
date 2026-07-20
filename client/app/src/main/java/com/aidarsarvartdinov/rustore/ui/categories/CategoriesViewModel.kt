@@ -18,15 +18,29 @@ class CategoriesViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<ApiResult<List<Category>>>(ApiResult.Loading)
     val uiState: StateFlow<ApiResult<List<Category>>> = _uiState
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing
+
     init {
         loadCategories()
+    }
+
+    private suspend fun fetchCategories() {
+        _uiState.value = repository.getCategories()
     }
 
     fun loadCategories() {
         viewModelScope.launch {
             _uiState.value = ApiResult.Loading
-            val result = repository.getCategories()
-            _uiState.value = result
+            fetchCategories()
+        }
+    }
+
+    fun refresh() {
+        viewModelScope.launch {
+            _isRefreshing.value = true
+            fetchCategories()
+            _isRefreshing.value = false
         }
     }
 }

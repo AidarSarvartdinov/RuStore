@@ -29,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -49,6 +50,7 @@ fun ShowcaseScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val category: String? = viewModel.category
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
 
     Scaffold(
         topBar = {
@@ -132,12 +134,18 @@ fun ShowcaseScreen(
                 }
                 is ApiResult.Success -> {
                     val apps = (uiState as ApiResult.Success).data
-                    LazyColumn(
-                        contentPadding = PaddingValues(vertical = 8.dp)
+                    PullToRefreshBox(
+                        isRefreshing =isRefreshing,
+                        onRefresh = { viewModel.refresh() },
+                        modifier = Modifier.fillMaxSize()
                     ) {
-                        items(apps) { app ->
-                            AppCard(app) {
-                                navController.navigate("appDetails/${app.id}")
+                        LazyColumn(
+                            contentPadding = PaddingValues(vertical = 8.dp)
+                        ) {
+                            items(apps) { app ->
+                                AppCard(app) {
+                                    navController.navigate("appDetails/${app.id}")
+                                }
                             }
                         }
                     }

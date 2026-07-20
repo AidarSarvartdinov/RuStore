@@ -22,6 +22,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -48,6 +49,7 @@ fun SearchScreen(
 ) {
     val searchQuery by viewModel.searchQuery.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
 
@@ -112,10 +114,15 @@ fun SearchScreen(
                 }
                 is ApiResult.Success -> {
                     val apps = (uiState as ApiResult.Success).data
-                    LazyColumn {
-                        items(apps) { app ->
-                            AppCard(app = app) {
-                                navController.navigate("appDetails/${app.id}")
+                    PullToRefreshBox(
+                        isRefreshing = isRefreshing,
+                        onRefresh = { viewModel.refresh() }
+                    ) {
+                        LazyColumn {
+                            items(apps) { app ->
+                                AppCard(app = app) {
+                                    navController.navigate("appDetails/${app.id}")
+                                }
                             }
                         }
                     }

@@ -22,19 +22,40 @@ class SearchViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<ApiResult<List<AppSummary>>>(ApiResult.Loading)
     val uiState: StateFlow<ApiResult<List<AppSummary>>> = _uiState
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing
+
     private var allApps: List<AppSummary> = emptyList()
 
     init {
         loadAllApps()
     }
 
+    private suspend fun fetchData(query: String) {
+        val list = if (query.isEmpty()) {
+            allApps.sortedByDescending { it.downloads }.take(10)
+        } else {
+            val filtered = allApps.filter { it.name.contains(query, ignoreCase = true) }
+
+            if (filtered.isEmpty()) {
+                allApps.sortedByDescending { it.downloads }.take(10)
+            } else {
+                filtered
+            }
+        }
+
+        _uiState.value = ApiResult.Success(list)
+    }
+
     fun loadAllApps() {
         viewModelScope.launch {
             _uiState.value = ApiResult.Loading
+
             val result = repository.getApps()
+
             if (result is ApiResult.Success) {
                 allApps = result.data
-                performSearch(query = "")
+                fetchData(_searchQuery.value)
             } else {
                 _uiState.value = result
             }
@@ -46,23 +67,26 @@ class SearchViewModel @Inject constructor(
     }
 
     fun performSearch() {
-        val query = _searchQuery.value.trim()
-        performSearch(query)
+        viewModelScope.launch {
+            _uiState.value = ApiResult.Loading
+            fetchData(_searchQuery.value.trim())
+        }
     }
 
-    private fun performSearch(query: String) {
-        val list = if (query.isEmpty()) {
-//             Popular (top 10)
-            allApps.sortedByDescending { it.downloads }.take(10)
-        } else {
-            val filtered = allApps.filter { it.name.contains(query, ignoreCase = true) }
-            if (filtered.isEmpty()) {
-                // При пустом результате — снова популярные
-                allApps.sortedByDescending { it.downloads }.take(10)
+    fun refresh() {
+        viewModelScope.launch {
+            _isRefreshing.value = true
+
+            val result = repository.getApps()
+
+            if (result is ApiResult.Success) {
+                allApps = result.data
+                fetchData(_searchQuery.value)
             } else {
-                filtered
+                _uiState.value = result
             }
+
+            _isRefreshing.value = false
         }
-        _uiState.value = ApiResult.Success(list)
     }
 }

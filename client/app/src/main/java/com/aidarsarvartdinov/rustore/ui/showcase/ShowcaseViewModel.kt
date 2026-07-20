@@ -23,19 +23,34 @@ class ShowcaseViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<ApiResult<List<AppSummary>>>(ApiResult.Loading)
     val uiState: StateFlow<ApiResult<List<AppSummary>>> = _uiState
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing
+
     init {
         loadApps()
+    }
+
+    private suspend fun fetchApps() {
+        val result = if (category != null) {
+            repository.getAppsByCategory(category)
+        } else {
+            repository.getApps()
+        }
+        _uiState.value = result
     }
 
     fun loadApps() {
         viewModelScope.launch {
             _uiState.value = ApiResult.Loading
-            val result = if (category != null) {
-                repository.getAppsByCategory(category)
-            } else {
-                repository.getApps()
-            }
-            _uiState.value = result
+            fetchApps()
+        }
+    }
+
+    fun refresh() {
+        viewModelScope.launch {
+            _isRefreshing.value = true
+            fetchApps()
+            _isRefreshing.value = false
         }
     }
 }

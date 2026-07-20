@@ -19,6 +19,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -38,6 +39,7 @@ fun CategoriesScreen(
     viewModel: CategoriesViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
 
     Scaffold(
         topBar = {
@@ -83,16 +85,21 @@ fun CategoriesScreen(
                 }
                 is ApiResult.Success -> {
                     val categories = (uiState as ApiResult.Success).data
-                    LazyColumn(
-                        contentPadding = PaddingValues(vertical = 8.dp)
+                    PullToRefreshBox(
+                        isRefreshing = isRefreshing,
+                        onRefresh = { viewModel.refresh() }
                     ) {
-                        items(categories) { category ->
-                            CategoryCard(
-                                category = category,
-                                onClick = {
-                                    navController.navigate("showcase?category=${category.name}")
-                                }
-                            )
+                        LazyColumn(
+                            contentPadding = PaddingValues(vertical = 8.dp)
+                        ) {
+                            items(categories) { category ->
+                                CategoryCard(
+                                    category = category,
+                                    onClick = {
+                                        navController.navigate("showcase?category=${category.name}")
+                                    }
+                                )
+                            }
                         }
                     }
                 }
