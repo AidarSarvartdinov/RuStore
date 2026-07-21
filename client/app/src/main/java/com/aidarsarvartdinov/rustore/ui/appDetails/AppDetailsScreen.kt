@@ -33,9 +33,10 @@ fun AppDetailsScreen(
     viewModel: AppDetailsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val downloadState by viewModel.downloadState.collectAsState()
 
     LaunchedEffect(appId) {
-        viewModel.loadApp(appId)
+        viewModel.loadApp()
     }
 
     Scaffold(
@@ -76,12 +77,18 @@ fun AppDetailsScreen(
                 }
                 is ApiResult.Success -> {
                     val app = (uiState as ApiResult.Success).data
-                    AppDetailsContent(app = app, navController = navController)
+                    AppDetailsContent(
+                        app = app,
+                        downloadState = downloadState,
+                        onDownloadClick = { viewModel.startDownload() },
+                        onCancelClick = { viewModel.cancelDownload() },
+                        onRetryClick = { viewModel.startDownload() },
+                        navController = navController)
                 }
                 is ApiResult.Error -> {
                     val error = (uiState as ApiResult.Error).message
                     ErrorScreen(message = error) {
-                        viewModel.loadApp(appId)
+                        viewModel.loadApp()
                     }
                 }
             }

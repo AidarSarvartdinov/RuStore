@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,10 +31,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.aidarsarvartdinov.rustore.data.models.AppDetails
+import com.aidarsarvartdinov.rustore.data.repository.DownloadProgress
 
 @Composable
 fun AppDetailsContent(
     app: AppDetails,
+    downloadState: DownloadProgress?,
+    onDownloadClick: () -> Unit,
+    onCancelClick: () -> Unit,
+    onRetryClick: () -> Unit,
     navController: NavController
 ) {
     LazyColumn(
@@ -85,18 +89,18 @@ fun AppDetailsContent(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Button(
-                        onClick = {
-                            // TODO: start downloading
-                        },
+
+                    DownloadButton(
+                        downloadState = downloadState,
+                        onDownloadClick = onDownloadClick,
+                        onCancelClick = onCancelClick,
+                        onRetryClick = onRetryClick,
                         modifier = Modifier
                             .widthIn(max = 400.dp)
                             .fillMaxWidth()
                             .padding(bottom = 16.dp),
                         shape = RoundedCornerShape(12.dp)
-                    ) {
-                        Text("Скачать")
-                    }
+                    )
                 }
 
             }
