@@ -2,6 +2,7 @@ package com.aidarsarvartdinov.rustore.di
 
 import android.content.Context
 import com.aidarsarvartdinov.rustore.data.datastore.DataStoreManager
+import com.aidarsarvartdinov.rustore.data.network.AppApi
 import com.aidarsarvartdinov.rustore.data.network.DownloadApi
 import com.aidarsarvartdinov.rustore.data.repository.AppRepository
 import com.aidarsarvartdinov.rustore.data.repository.MockRepository
@@ -25,11 +26,11 @@ import javax.inject.Singleton
 object AppModule {
     private const val BASE_URL = "http://localhost:8080/"
 
-    @Provides
-    @Singleton
-    fun provideAppRepository(): AppRepository {
-        return MockRepository()
-    }
+//    @Provides
+//    @Singleton
+//    fun provideAppRepository(): AppRepository {
+//        return MockRepository()
+//    }
 
     @Provides
     @Singleton
@@ -69,6 +70,12 @@ object AppModule {
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAppApi(retrofit: Retrofit): AppApi {
+        return retrofit.create(AppApi::class.java)
     }
 
     @Provides

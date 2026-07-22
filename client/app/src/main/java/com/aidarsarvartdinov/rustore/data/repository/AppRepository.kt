@@ -9,5 +9,6 @@ interface AppRepository {
     suspend fun getApps(): ApiResult<List<AppSummary>>
     suspend fun getAppsByCategory(categoryName: String): ApiResult<List<AppSummary>>
     suspend fun getAppDetails(appId: String): ApiResult<AppDetails>
+    suspend fun searchApps(query: String): ApiResult<List<AppSummary>>
     suspend fun getCategories(): ApiResult<List<Category>>
 }

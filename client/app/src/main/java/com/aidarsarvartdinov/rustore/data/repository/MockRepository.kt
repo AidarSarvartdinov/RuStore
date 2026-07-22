@@ -7,27 +7,13 @@ import com.aidarsarvartdinov.rustore.data.models.Category
 
 class MockRepository: AppRepository {
     override suspend fun getApps(): ApiResult<List<AppSummary>> {
-        return ApiResult.Success(apps.map { appDetails ->
-            AppSummary(
-                appDetails.id,
-                appDetails.name,
-                appDetails.description.substring(0, 40),
-                appDetails.category,
-                appDetails.iconUrl,
-                appDetails.downloads) })
+        return ApiResult.Success(apps.map { it.toSummary() })
     }
 
     override suspend fun getAppsByCategory(categoryName: String): ApiResult<List<AppSummary>> {
         return ApiResult.Success(apps
             .filter { appDetails -> appDetails.category == categoryName }
-            .map { appDetails ->1
-                    AppSummary(
-                        appDetails.id,
-                        appDetails.name,
-                        appDetails.description.substring(0, 40),
-                        appDetails.category,
-                        appDetails.iconUrl,
-                        appDetails.downloads) })
+            .map { it.toSummary() })
     }
 
     override suspend fun getAppDetails(appId: String): ApiResult<AppDetails> {
@@ -58,6 +44,30 @@ class MockRepository: AppRepository {
             ),
         ))
     }
+
+    override suspend fun searchApps(query: String): ApiResult<List<AppSummary>> {
+        val trimmed = query.trim()
+        val list = if (trimmed.isEmpty()) {
+            apps.sortedByDescending { it.downloads }.take(10)
+        } else {
+            val filtered = apps.filter { it.name.contains(trimmed, ignoreCase = true) }
+            if (filtered.isEmpty()) {
+                apps.sortedByDescending { it.downloads }.take(10)
+            } else {
+                filtered
+            }
+        }
+        return ApiResult.Success(list.map { it.toSummary() })
+    }
+
+    private fun AppDetails.toSummary() = AppSummary(
+        id = id,
+        name = name,
+        shortDescription = description.substring(0, 100).plus("..."),
+        category = category,
+        iconUrl = iconUrl,
+        downloads = downloads
+    )
 
     private companion object MockData {
         val apps = listOf(

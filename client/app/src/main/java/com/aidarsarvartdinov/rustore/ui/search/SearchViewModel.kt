@@ -25,41 +25,9 @@ class SearchViewModel @Inject constructor(
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
 
-    private var allApps: List<AppSummary> = emptyList()
 
     init {
-        loadAllApps()
-    }
-
-    private suspend fun fetchData(query: String) {
-        val list = if (query.isEmpty()) {
-            allApps.sortedByDescending { it.downloads }.take(10)
-        } else {
-            val filtered = allApps.filter { it.name.contains(query, ignoreCase = true) }
-
-            if (filtered.isEmpty()) {
-                allApps.sortedByDescending { it.downloads }.take(10)
-            } else {
-                filtered
-            }
-        }
-
-        _uiState.value = ApiResult.Success(list)
-    }
-
-    fun loadAllApps() {
-        viewModelScope.launch {
-            _uiState.value = ApiResult.Loading
-
-            val result = repository.getApps()
-
-            if (result is ApiResult.Success) {
-                allApps = result.data
-                fetchData(_searchQuery.value)
-            } else {
-                _uiState.value = result
-            }
-        }
+        performSearch()
     }
 
     fun updateSearchQuery(query: String) {
@@ -69,23 +37,16 @@ class SearchViewModel @Inject constructor(
     fun performSearch() {
         viewModelScope.launch {
             _uiState.value = ApiResult.Loading
-            fetchData(_searchQuery.value.trim())
+            val result = repository.searchApps(_searchQuery.value.trim())
+            _uiState.value = result
         }
     }
 
     fun refresh() {
         viewModelScope.launch {
             _isRefreshing.value = true
-
-            val result = repository.getApps()
-
-            if (result is ApiResult.Success) {
-                allApps = result.data
-                fetchData(_searchQuery.value)
-            } else {
-                _uiState.value = result
-            }
-
+            val result = repository.searchApps(_searchQuery.value.trim())
+            _uiState.value = result
             _isRefreshing.value = false
         }
     }

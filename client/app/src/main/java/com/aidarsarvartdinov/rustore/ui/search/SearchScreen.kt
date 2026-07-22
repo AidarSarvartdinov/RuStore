@@ -73,7 +73,7 @@ fun SearchScreen(
                         keyboardActions = KeyboardActions(
                             onSearch = {
                                 viewModel.performSearch()
-                                focusManager.clearFocus() // скрываем клавиатуру
+                                focusManager.clearFocus()
                             }
                         ),
                         colors = TextFieldDefaults.colors(
@@ -132,7 +132,7 @@ fun SearchScreen(
                     Text(text = error)
                     ErrorScreen(
                         message = error,
-                        onRetry = { viewModel.loadAllApps() }
+                        onRetry = { viewModel.performSearch() }
                     )
                 }
             }
