@@ -21,6 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
@@ -30,58 +32,60 @@ fun ScreenshotsPager(
     screenshots: List<String>,
     initialIndex: Int
 ) {
-    val pagerState = rememberPagerState (
+    val pagerState = rememberPagerState(
         initialPage = initialIndex.coerceIn(0, screenshots.size - 1)
     ) { screenshots.size }
     val scope = rememberCoroutineScope()
+    val density = LocalDensity.current
+    val screenWidthPx = LocalWindowInfo.current.containerSize.width
+    val screenWidthDp = with(density) { screenWidthPx.toDp() }
+
+    val thumbnailSize = if (screenWidthDp < 600.dp) 64.dp else 80.dp
+    val thumbnailHeight = 64.dp
+    val thumbnailWidth = if (screenWidthDp < 600.dp) 48.dp else 72.dp
 
     Column(
-        modifier = Modifier.fillMaxSize(),
-
+        modifier = Modifier.fillMaxSize()
     ) {
-//        screenshot
         HorizontalPager(
             state = pagerState,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-        ) {
-            page ->
-                Box(
+        ) { page ->
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                AsyncImage(
+                    model = screenshots[page],
+                    contentDescription = null,
                     modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    AsyncImage(
-                        model = screenshots[page],
-                        contentDescription = null,
-                        modifier = Modifier
-                            .fillMaxHeight(0.9f)
-                            .clip(RoundedCornerShape(16.dp)),
-                        contentScale = ContentScale.Fit
-                    )
-                }
-
+                        .fillMaxWidth(0.95f)
+                        .fillMaxHeight(0.92f)
+                        .clip(RoundedCornerShape(16.dp)),
+                    contentScale = ContentScale.Fit
+                )
+            }
         }
 
-//        miniatures
         LazyRow(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(80.dp)
+                .height(thumbnailSize)
                 .padding(horizontal = 8.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             itemsIndexed(screenshots) { index, screenshot ->
                 val isSelected = index == pagerState.currentPage
-                val alpha = if (isSelected) 1.0f else 0.5f
+                val alpha = if (isSelected) 1.0f else 0.4f
 
                 AsyncImage(
                     model = screenshot,
                     contentDescription = "Миниатюра",
                     modifier = Modifier
-                        .height(64.dp)
-                        .width(48.dp)
+                        .height(thumbnailHeight)
+                        .width(thumbnailWidth)
                         .clip(RoundedCornerShape(8.dp))
                         .clickable {
                             scope.launch {
