@@ -151,8 +151,8 @@ fun ShowcaseScreen(
                     }
                 }
                 is ApiResult.Error -> {
-                    val error = (uiState as ApiResult.Error).message
-                    ErrorScreen(message = error) {
+                    val message = (uiState as ApiResult.Error).message
+                    ErrorScreen(message) {
                         viewModel.loadApps()
                     }
                 }

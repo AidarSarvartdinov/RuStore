@@ -89,12 +89,11 @@ fun ScreenshotsScreen(
                     }
                 }
                 is ApiResult.Error -> {
-                    val error = (uiState as ApiResult.Error).message
-                    Text(text = error)
-                    ErrorScreen(
-                        message = error,
-                        onRetry = { viewModel.loadScreenshots(appId) }
-                    )
+                    val message = (uiState as ApiResult.Error).message
+                    ErrorScreen(message) {
+                        viewModel.loadScreenshots(appId)
+                    }
+
                 }
             }
         }

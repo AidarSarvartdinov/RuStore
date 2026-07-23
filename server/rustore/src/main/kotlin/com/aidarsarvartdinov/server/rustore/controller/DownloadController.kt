@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.io.File
 
@@ -26,9 +27,9 @@ class DownloadController(
     private val downloadWorker: DownloadWorker
 ) {
     @PostMapping("/start")
-    fun startDownload(): TaskResponse {
-        val taskId = taskService.createTask()
-        downloadWorker.processDownload(taskId)
+    fun startDownload(@RequestParam appId: String): TaskResponse {
+        val taskId = taskService.createTask(appId)
+        downloadWorker.processDownload(taskId, appId)
         return TaskResponse(taskId)
     }
 

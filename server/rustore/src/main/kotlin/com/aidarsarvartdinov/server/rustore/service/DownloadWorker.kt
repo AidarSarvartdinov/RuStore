@@ -4,14 +4,18 @@ import com.aidarsarvartdinov.server.rustore.dto.TaskStatus
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
 import java.io.File
+import java.io.FileOutputStream
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 @Component
 class DownloadWorker(
-    private val taskService: TaskService
+    private val taskService: TaskService,
+    private val appService: AppService
 ) {
 
     @Async
-    fun processDownload(taskId: String) {
+    fun processDownload(taskId: String, appId: String) {
         try {
             taskService.updateTaskStatus(taskId, TaskStatus.IN_PROGRESS)
 
@@ -21,9 +25,17 @@ class DownloadWorker(
                 taskService.updateTaskProgress(taskId, i)
             }
 
+            val appDetails = appService.getAppDetails(appId)
+            val appName = appDetails?.name ?: "Unknown"
+
             val tempFile = File.createTempFile("app_", ".apk")
 
-            tempFile.writeBytes("Test APK file".toByteArray())
+            ZipOutputStream(FileOutputStream(tempFile)).use { zos ->
+                val entry = ZipEntry("app_name.txt")
+                zos.putNextEntry(entry)
+                zos.write(appName.toByteArray())
+                zos.closeEntry()
+            }
 
             taskService.completeTask(taskId, tempFile.absolutePath)
 

@@ -6,6 +6,7 @@ import com.aidarsarvartdinov.rustore.data.network.AppApi
 import com.aidarsarvartdinov.rustore.data.network.DownloadApi
 import com.aidarsarvartdinov.rustore.data.repository.AppRepository
 import com.aidarsarvartdinov.rustore.data.repository.MockRepository
+import com.aidarsarvartdinov.rustore.utils.WorkerDependencies
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -31,6 +32,13 @@ object AppModule {
 //    fun provideAppRepository(): AppRepository {
 //        return MockRepository()
 //    }
+
+    init {
+        val moshi = provideMoshi()
+        val okHttpClient = provideOkHttpClient()
+        val retrofit = provideRetrofit(okHttpClient, moshi)
+        WorkerDependencies.downloadApi = retrofit.create(DownloadApi::class.java)
+    }
 
     @Provides
     @Singleton
@@ -83,4 +91,5 @@ object AppModule {
     fun provideDownloadApi(retrofit: Retrofit): DownloadApi {
         return retrofit.create(DownloadApi::class.java)
     }
+
 }

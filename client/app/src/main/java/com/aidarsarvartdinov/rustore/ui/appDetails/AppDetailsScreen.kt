@@ -34,6 +34,7 @@ fun AppDetailsScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val downloadState by viewModel.downloadState.collectAsState()
+    val isInstalled by viewModel.isInstalled.collectAsState()
 
     LaunchedEffect(appId) {
         viewModel.loadApp()
@@ -41,11 +42,10 @@ fun AppDetailsScreen(
 
     Scaffold(
         topBar = {
-
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .background(color = MaterialTheme.colorScheme.surface)
-
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = MaterialTheme.colorScheme.surface)
             ) {
                 IconButton(
                     onClick = { navController.navigateUp() },
@@ -58,7 +58,6 @@ fun AppDetailsScreen(
                     )
                 }
             }
-
         }
     ) { innerPadding ->
         Box(
@@ -80,14 +79,18 @@ fun AppDetailsScreen(
                     AppDetailsContent(
                         app = app,
                         downloadState = downloadState,
+                        isInstalled = isInstalled,
                         onDownloadClick = { viewModel.startDownload() },
                         onCancelClick = { viewModel.cancelDownload() },
                         onRetryClick = { viewModel.startDownload() },
-                        navController = navController)
+                        onOpenClick = { /* no real APK files */ },
+                        onDeleteClick = { viewModel.deleteApp() },
+                        navController = navController
+                    )
                 }
                 is ApiResult.Error -> {
-                    val error = (uiState as ApiResult.Error).message
-                    ErrorScreen(message = error) {
+                    val message = (uiState as ApiResult.Error).message
+                    ErrorScreen (message) {
                         viewModel.loadApp()
                     }
                 }

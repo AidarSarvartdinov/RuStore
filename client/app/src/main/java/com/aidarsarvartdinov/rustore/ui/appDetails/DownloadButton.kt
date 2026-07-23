@@ -1,6 +1,8 @@
 package com.aidarsarvartdinov.rustore.ui.appDetails
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -19,14 +21,41 @@ import com.aidarsarvartdinov.rustore.data.repository.DownloadProgress
 @Composable
 fun DownloadButton(
     downloadState: DownloadProgress?,
+    isInstalled: Boolean,
     onDownloadClick: () -> Unit,
     onCancelClick: () -> Unit,
     onRetryClick: () -> Unit,
+    onOpenClick: () -> Unit,
+    onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier,
     shape: Shape = ButtonDefaults.shape
 ) {
-    when (downloadState?.status) {
-        null -> {
+    when {
+        isInstalled -> {
+            Row(
+                modifier = modifier,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Button(
+                    onClick = onOpenClick,
+                    modifier = Modifier.weight(1f),
+                    shape = shape
+                ) {
+                    Text("Открыть")
+                }
+                Button(
+                    onClick = onDeleteClick,
+                    modifier = Modifier.weight(1f),
+                    shape = shape,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error
+                    )
+                ) {
+                    Text("Удалить")
+                }
+            }
+        }
+        downloadState?.status == TaskStatus.CANCELLED || downloadState == null -> {
             Button(
                 onClick = onDownloadClick,
                 modifier = modifier,
@@ -35,13 +64,10 @@ fun DownloadButton(
                 Text("Установить")
             }
         }
-
-        TaskStatus.PENDING, TaskStatus.IN_PROGRESS -> {
-            Column(
-                modifier = modifier
-            ) {
+        downloadState.status == TaskStatus.PENDING || downloadState.status == TaskStatus.IN_PROGRESS -> {
+            Column(modifier = modifier) {
                 Button(
-                    onClick = { /* button is blocked */ },
+                    onClick = { /* disabled */ },
                     modifier = Modifier.fillMaxWidth(),
                     shape = shape,
                     enabled = false
@@ -51,47 +77,35 @@ fun DownloadButton(
                         color = Color.White,
                         strokeWidth = 2.dp
                     )
-                    Text(
-                        text = " ${downloadState.progress}%",
-                        modifier = Modifier.weight(1f)
-                    )
+                    Text(" ${downloadState.progress}%", modifier = Modifier.weight(1f))
                 }
-
                 Button(
                     onClick = onCancelClick,
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
+                    shape = shape,
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                 ) {
                     Text("Отменить")
                 }
             }
         }
-
-        TaskStatus.COMPLETED -> {
-            Button(
-                onClick = { /* TODO: открыть приложение, если установлено */ },
+        downloadState.status == TaskStatus.COMPLETED -> {
+            Row(
                 modifier = modifier,
-                shape = shape
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text("Открыть")
+                Button(onClick = onOpenClick, modifier = Modifier.weight(1f)) {
+                    Text("Открыть")
+                }
+                Button(onClick = onDeleteClick, modifier = Modifier.weight(1f), colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)) {
+                    Text("Удалить")
+                }
             }
         }
-
-        TaskStatus.FAILED -> {
-            Column(
-                modifier = modifier
-            ) {
-                Text(
-                    text = "Ошибка: ${downloadState.errorMessage ?: "Неизвестная ошибка"}",
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall
-                )
-                Button(
-                    onClick = onRetryClick,
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = shape
-                ) {
+        downloadState.status == TaskStatus.FAILED -> {
+            Column(modifier = modifier) {
+                Text("Ошибка: ${downloadState.errorMessage}", color = MaterialTheme.colorScheme.error)
+                Button(onClick = onRetryClick, modifier = Modifier.fillMaxWidth()) {
                     Text("Повторить")
                 }
             }

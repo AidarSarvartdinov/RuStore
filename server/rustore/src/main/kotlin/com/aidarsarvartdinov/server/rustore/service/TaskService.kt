@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap
 class TaskService {
     data class Task(
         val id: String,
+        val appId: String,
         var status: TaskStatus = TaskStatus.PENDING,
         var progress: Int = 0,
         var errorMessage: String? = null,
@@ -17,9 +18,9 @@ class TaskService {
 
     private val tasks = ConcurrentHashMap<String, Task>()
 
-    fun createTask(): String {
+    fun createTask(appId: String): String {
         val taskId = UUID.randomUUID().toString()
-        tasks[taskId] = Task(id = taskId)
+        tasks[taskId] = Task(taskId, appId)
         return taskId
     }
 

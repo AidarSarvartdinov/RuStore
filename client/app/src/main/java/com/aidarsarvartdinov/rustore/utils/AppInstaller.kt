@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import androidx.core.content.FileProvider
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
@@ -16,7 +17,10 @@ class ApkInstaller @Inject constructor(
 ) {
 
     fun installApk(file: File): Boolean {
-        if (!file.exists()) return false
+        if (!file.exists()) {
+            Log.e("ApkInstaller", "File not exists: ${file.absolutePath}")
+            return false
+        }
 
         val intent = Intent(Intent.ACTION_VIEW).apply {
             val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -35,17 +39,11 @@ class ApkInstaller @Inject constructor(
 
         return if (intent.resolveActivity(context.packageManager) != null) {
             context.startActivity(intent)
+            Log.d("ApkInstaller", "Install intent started")
             true
         } else {
+            Log.e("ApkInstaller", "No activity to handle install intent")
             false
         }
-    }
-
-    private fun getUriForFile(file: File): Uri {
-        return FileProvider.getUriForFile(
-            context,
-            "${context.packageName}.fileprovider",
-            file
-        )
     }
 }

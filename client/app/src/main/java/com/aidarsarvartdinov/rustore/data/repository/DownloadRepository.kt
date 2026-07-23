@@ -7,6 +7,7 @@ import java.io.File
 interface DownloadRepository {
     fun downloadApp(appId: String): Flow<DownloadProgress>
     suspend fun cancelDownload(taskId: String)
+    fun getProgress(taskId: String): Flow<DownloadProgress>
 }
 
 data class DownloadProgress(
@@ -14,5 +15,5 @@ data class DownloadProgress(
     val status: TaskStatus,
     val progress: Int = 0,
     val errorMessage: String? = null,
-    val downloadedFile: File? = null
+    val apkFile: File? = null
 )

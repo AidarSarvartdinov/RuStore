@@ -128,12 +128,11 @@ fun SearchScreen(
                     }
                 }
                 is ApiResult.Error -> {
-                    val error = (uiState as ApiResult.Error).message
-                    Text(text = error)
-                    ErrorScreen(
-                        message = error,
-                        onRetry = { viewModel.performSearch() }
-                    )
+                    val message = (uiState as ApiResult.Error).message
+                    ErrorScreen(message) {
+                        viewModel.performSearch()
+                    }
+
                 }
             }
         }

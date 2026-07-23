@@ -104,8 +104,10 @@ fun CategoriesScreen(
                     }
                 }
                 is ApiResult.Error -> {
-                    val error = (uiState as ApiResult.Error).message
-                    ErrorScreen(error) { viewModel.loadCategories() }
+                    val message = (uiState as ApiResult.Error).message
+                    ErrorScreen(message) {
+                        viewModel.loadCategories()
+                    }
                 }
             }
         }

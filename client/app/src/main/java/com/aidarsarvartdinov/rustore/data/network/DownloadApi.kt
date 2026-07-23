@@ -8,11 +8,12 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 import retrofit2.http.Streaming
 
 interface DownloadApi {
     @POST("api/download/start")
-    suspend fun startDownload(): TaskResponse
+    suspend fun startDownload(@Query("appId") appId: String): TaskResponse
 
     @GET("api/download/status/{taskId}")
     suspend fun getTaskStatus(@Path("taskId") taskId: String): TaskStatusResponse

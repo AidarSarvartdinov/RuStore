@@ -3,7 +3,6 @@ package com.aidarsarvartdinov.rustore.ui.appDetails
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -26,7 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.text.font.FontWeight
@@ -41,9 +39,12 @@ import com.aidarsarvartdinov.rustore.data.repository.DownloadProgress
 fun AppDetailsContent(
     app: AppDetails,
     downloadState: DownloadProgress?,
+    isInstalled: Boolean,
     onDownloadClick: () -> Unit,
     onCancelClick: () -> Unit,
     onRetryClick: () -> Unit,
+    onOpenClick: () -> Unit,
+    onDeleteClick: () -> Unit,
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
@@ -101,12 +102,16 @@ fun AppDetailsContent(
 
                 DownloadButton(
                     downloadState = downloadState,
+                    isInstalled = isInstalled,
                     onDownloadClick = onDownloadClick,
                     onCancelClick = onCancelClick,
                     onRetryClick = onRetryClick,
+                    onOpenClick = onOpenClick,
+                    onDeleteClick = onDeleteClick,
                     modifier = Modifier
                         .widthIn(max = 400.dp)
                         .fillMaxWidth()
+                        .padding(bottom = 16.dp)
                 )
             }
         }
